@@ -9,8 +9,56 @@
 	<div th:replace="/fragments/default :: header"></div>
 	<!-- jumbotron -->
 	<div th:replace="/fragments/default :: jumbo"></div>
-	<h1 th:text="${board}"></h1>
+	<div class="container">
+		<h2 th:text="${board}"></h2>
+
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Num</th>
+					<th scope="col">Title</th>
+					<th scope="col">Writer</th>
+					<th scope="col">Date</th>
+					<th scope="col">Hit</th>
+					<th scope="col">Index</th>
+					<th scope="col">Count</th>
+					<th scope="col">Size</th>
+					<th scope="col">even</th>
+					<th scope="col">odd</th>
+					<th scope="col">first</th>
+					<th scope="col">last</th>
+					<!-- <th scope="col">Current</th> -->
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="vo, state : ${list}">
+					<th scope="row" th:text="${vo.num}"></th>
+									<!-- @{|${board}select| -->
+									<!-- parameter 전송 @{URL 주소(파라미터명=값, 파라미터명2=값2,...)} -->
+					<td><a href="#" th:href="@{./select(num=${vo.num})}" th:text="${vo.title}">Mark</a></td>
+					<td th:text="${vo.writer}">Otto</td>
+					<td th:text="${vo.regDate}">@mdo</td>
+					<td th:text="${vo.hit}"></td>
+					<td th:text="${state.index}"></td>
+					<!-- 인덱스 번호 0 부터 시작 -->
+					<td th:text="${state.count}"></td>
+					<!-- 횟수 번호 1 부터 시작 -->
+					<td th:text="${state.size}"></td>
+					<!-- 총 갯수  -->
+					<td th:text="${state.even}"></td>
+					<!-- 현재 반복의 짝수 여부   -->
+					<td th:text="${state.odd}"></td>
+					<!-- 현재 반복의 홀수 여부   -->
+					<!-- <td th:text="${state.current}"></td> 현재 요소  -->
+					<td th:text="${state.first}"></td>
+					<!-- 현재 반복이 첫번째 여부   -->
+					<td th:text="${state.last}"></td>
+					<!-- 현재 반복이 마지막 여부   -->
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<!-- footer -->
-	<div th:replace="/fragments/default :: footer"> </div>
+	<div th:replace="/fragments/default :: footer"></div>
 </body>
 </html>
