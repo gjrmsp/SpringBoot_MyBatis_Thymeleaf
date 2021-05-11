@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/default :: head(|${board}List|)">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- header -->
+	<div th:replace="/fragments/default :: header"></div>
+	<!-- jumbotron -->
+	<div th:replace="/fragments/default :: jumbo"></div>
+	<h1 th:text="${board}"></h1>
+	<!-- footer -->
+	<div th:replace="/fragments/default :: footer"> </div>
+</body>
+</html>
