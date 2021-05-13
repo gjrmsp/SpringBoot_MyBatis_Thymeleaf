@@ -3,14 +3,70 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-  <mapper namespace="com.sana.s1.board.notice.NoticeMapper">
-	<select id="getList" resultType="NoticeVO">
-		select * from
-			(select rownum R, N.* from
-				(select * from notice order by num desc) N)
-		where R between 1 and 10
+<mapper namespace="com.sana.s1.board.notice.NoticeMapper">
+	<sql id="searcher">
+		<!-- 공통으로 사용하는 sql문 -->
+		<where>
+			<choose>
+				<when test="kind=='Writer'">
+					writer like concat('%', #{search}, '%')
+				</when>
+
+				<when test="kind=='contents'">
+					contents like concat('%', #{search}, '%')
+				</when>
+
+				<otherwise>
+					title like concat('%', #{search}, '%')
+				</otherwise>
+			</choose>
+		</where>
+	</sql>
+	<select id="getList" resultType="NoticeVO" parameterType="Pager">
+		select * from notice
+		<include refid="searcher"></include>
+		order by num desc
+		limit #{startRow}, #{perPage}
+		<!-- limit 시작index번호(0부터시작), 갯수 -->
 	</select>
-	<select id="getSelect" resultType="NoticeVO" parameterType="NoticeVO">
-		select * from notice where num=#{num}
+	<select id="getTotalCount" parameterType="Pager"
+		resultType="java.lang.Long">
+		select count(num) from notice
+		<include refid="searcher"></include>
 	</select>
-  </mapper>
+	<select id="getSelect" resultType="NoticeVO"
+		parameterType="NoticeVO">
+		select N.*, NF.* from notice N left join noticeFiles NF
+		on N.num = NF.num where N.num=#{num}
+	</select>
+	<resultMap type="NoticeVO" id="selectResult">
+		<id column="num" property="num"/>
+		<result column="title" property="title"/>
+		<result column="writer" property="writer"/>
+		<result column="contents" property="contents"/>
+		<result column="regDate" property="regDate"/>
+		<result column="hit" property="hit"/>
+		<collection property="files" javaType="java.util.List" ofType="BoardFileVO">
+			<id column="filenum" property="fileNum"/>
+			<result column="fileName" property="fileName"/>
+			<result column="oriName" property="oriName"/>
+		</collection>
+	</resultMap>
+	<update id="setHitUpdate" parameterType="BoardVO">
+		update notice set hit=hit+1 where num=#{num}
+	</update>
+	<insert id="setInsert" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="num">
+		insert into notice
+		values(#{num}, #{title}, #{writer}, #{contents}, now(), 0)
+	</insert>
+	<insert id="setFileInsert" parameterType="BoardFileVO">
+		insert into noticeFiles (num, filename, oriname)
+		values (#{num}, #{fileName}, #{oriName})
+	</insert>
+	<update id="setUpdate" parameterType="BoardVO">
+		update notice set title=#{title}, contents=#{contents} where num=#{num}
+	</update>
+	<delete id="setDelete" parameterType="BoardVO">
+		delete from notice where num=#{num}
+	</delete>
+</mapper>

@@ -11,6 +11,25 @@
 	<div th:replace="/fragments/default :: jumbo"></div>
 	<div class="container">
 		<h2 th:text="${board}"></h2>
+		<!-- 검색 form -->
+		<div class=" d-flex justify-content-start">
+			<div class="input-group align-items-center">
+				<form id="frm" th:action="@{list}" class="form-inline">
+					<input type="hidden" name="curPage" value="1" id="curPage">
+					<div class="input-group-prepend">
+						<select class="form-control" name="kind" id="kind" th:value="${pager.kind}">
+							<option class="sel"	th:selected="${pager.kind}== 'Title'?true:false">Title</option>
+							<option class="sel"	th:selected="${pager.kind}=='Contents'?true:false">Contents</option>
+							<option class="sel"	th:selected="${pager.kind}=='Writer'?true:false">Writer</option>
+						</select>
+					</div>
+					<input type="text" class="form-control" name="search" id="search" th:value="${pager.search}" placeholder="">
+					<div class="input-group-append">
+						<button class="btn btn-success" type="submit">Search</button>
+					</div>
+				</form>
+			</div>
+		</div>
 
 		<table class="table">
 			<thead class="thead-dark">
@@ -33,8 +52,8 @@
 			<tbody>
 				<tr th:each="vo, state : ${list}">
 					<th scope="row" th:text="${vo.num}"></th>
-									<!-- @{|${board}select| -->
-									<!-- parameter 전송 @{URL 주소(파라미터명=값, 파라미터명2=값2,...)} -->
+					<!-- @{|${board}select| -->
+					<!-- parameter 전송 @{URL 주소(파라미터명=값, 파라미터명2=값2,...)} -->
 					<td><a href="#" th:href="@{./select(num=${vo.num})}" th:text="${vo.title}">Mark</a></td>
 					<td th:text="${vo.writer}">Otto</td>
 					<td th:text="${vo.regDate}">@mdo</td>
@@ -57,8 +76,27 @@
 				</tr>
 			</tbody>
 		</table>
+		<a href="#" class="btn btn-info" th:href="@{./insert}">WRITE</a>
+	</div>
+	<div class="container d-flex justify-content-center">
+		<ul class="pagination">
+			<li th:classappend="${pager.pre? 'disable':'active'}" class="page-item">
+				<a th:if="${pager.pre}"	class="page-link pager" href="#" th:title="${pager.startNum-1}">Previous</a>
+				<!-- if else ==> if unless 
+		  			 unless 사용 시에도 조건식은 사용
+		  			 if문에 사용한 조건식과 동일한 조건식 사용 -->
+		  		<span th:unless="${pager.pre}" class="page-link">Previous</span>
+		  	</li>
+			<li class="page-item" th:each="i : ${#numbers.sequence(pager.startNum, pager.lastNum)}">
+				<a class="page-link pager" href="#" th:text="${i}" th:title="${i}">Previous</a>
+			</li>
+			<li th:if="${pager.next}" class="page-item">
+				<a class="page-link" href="#" th:title="${pager.lastNum+1}" th>Next</a>
+			</li>
+		</ul>
 	</div>
 	<!-- footer -->
 	<div th:replace="/fragments/default :: footer"></div>
+<script type="text/javascript" th:src="@{/js/boardSearch.js}"></script>
 </body>
 </html>
