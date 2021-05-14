@@ -30,6 +30,22 @@ public class NoticeController {
 		return "notice";
 	}
 	
+	// /notice/fileDown
+	@GetMapping("fileDown")
+	public ModelAndView fileDown(String fileName, String oriName) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("fileName", fileName);
+		mv.addObject("oriName", oriName);
+		mv.addObject("filePath", "/upload/notice/");
+		mv.setViewName("fileDown");
+
+		// view의 이름은 Bean의 이름과 일치
+		mv.setViewName("down");
+		//  /fileDown.html
+		return mv;
+	}
+
+	// /notice/list
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
 		List<BoardVO> ar = noticeService.getList(pager);
@@ -37,6 +53,7 @@ public class NoticeController {
 		model.addAttribute("pager", pager);
 		System.out.println(pager.getStartNum());
 		System.out.println(pager.getLastNum());
+		// /board/list.html
 		return "board/list";
 	}
 	
