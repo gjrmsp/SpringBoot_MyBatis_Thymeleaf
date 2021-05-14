@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sana.s1.board.BoardFileVO;
@@ -13,6 +14,7 @@ import com.sana.s1.util.FileManager;
 import com.sana.s1.util.Pager;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class NoticeService implements BoardService {
 	
 	@Autowired
@@ -38,9 +40,17 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public int setInsert(BoardVO boardVO, MultipartFile [] files) throws Exception {
 		// TODO Auto-generated method stub
 		int result = noticeMapper.setInsert(boardVO);
+
+		//예외는 발생하지 않고 결과가 0이 나올경우 
+		//강제로 예외 발생
+		if(result<1) {
+			throw new Exception();
+		}
+		
 		String filePath= "upload/notice/";
 		
 		for(MultipartFile multipartFile:files) {
