@@ -13,6 +13,7 @@
 		<h2 th:utext="${vo.contents}"></h2>
 		<a th:href="@{./update(num=${vo.num})}" class="btn btn-success">Update</a>
 		<a th:href="@{./delete(num=${vo.num})}" class="btn btn-danger">Delete</a>
+		<a th:href="@{./reply(num=${vo.num})}" class="btn btn-info">Reply</a>
 		<p th:each="fileVO : ${vo.files}">
 			<!-- <a th:href="@{|/upload/${board}/${fileVO.fileName}|}" th:text="${fileVO.oriName}"></a> -->
 			<a th:href="@{./fileDown(fileName=${fileVO.fileName}, oriName=${fileVO.oriName})}" th:text="${fileVO.oriName}"></a>

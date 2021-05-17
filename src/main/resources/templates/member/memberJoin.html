@@ -7,12 +7,67 @@
 <body>
 	<!-- header -->
 	<div th:replace="/fragments/default :: header"></div>
+
 	<!-- jumbotron -->
 	<div th:replace="/fragments/default :: jumbo"></div>
+
 	<!-- /member/memberJoin -->
 	<!-- com...member.MemberController.setJoin() -->
-	<h1>Member Join Page</h1>
+	<div class="container mt-2">
+		<h1>Member Join Page</h1>
+
+		<form id="frm" action="./join" th:action="@{./memberJoin}"
+			method="post" enctype="multipart/form-data">
+
+			<div class="form-group">
+				<label for="id">ID</label>
+				<input type="text" class="form-control"	id="id" name="username">
+				<h4 id="idResult"></h4>
+				<!-- ID 는 6글자 이상 -->
+			</div>
+
+			<div class="form-group">
+				<label for="pw">Password</label>
+				<input type="password" class="form-control" id="pw" name="password1">
+				<h4 id="pwResult"></h4>
+				<!-- PW는 8글자 이상 -->
+			</div>
+
+			<div class="form-group">
+				<label for="pw">Password</label>
+				<input type="password" class="form-control" id="pw2" name="password">
+				<!-- PW 두개는 일치 -->
+			</div>
+
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" class="form-control etc" id="name" name="name">
+				<!-- 비어 있으면 X -->
+			</div>
+
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="text" class="form-control etc" id="email" name="email">
+				<!-- 비어 있으면 X -->
+			</div>
+
+			<div class="form-group">
+				<label for="phone">Phone</label> <input type="text"
+					class="form-control etc" id="phone" name="phone">
+				<!-- 비어 있으면 X -->
+			</div>
+
+			<div class="form-group">
+				<label for="avatar">Avatar</label>
+				<input type="file" class="form-control etc" id="avatar" name="avatar">
+				<!-- 비어 있으면 X -->
+			</div>
+
+			<input type="submit" id="btn" value="JOIN" class="btn btn-primary">
+		</form>
+	</div>
+
 	<!-- footer -->
-	<div th:replace="/fragments/default :: footer"> </div>
+	<div th:replace="/fragments/default :: footer"></div>
 </body>
 </html>

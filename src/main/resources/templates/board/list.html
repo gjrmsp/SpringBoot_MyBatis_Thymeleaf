@@ -54,7 +54,11 @@
 					<th scope="row" th:text="${vo.num}"></th>
 					<!-- @{|${board}select| -->
 					<!-- parameter 전송 @{URL 주소(파라미터명=값, 파라미터명2=값2,...)} -->
-					<td><a href="#" th:href="@{./select(num=${vo.num})}" th:text="${vo.title}">Mark</a></td>
+			      	<td>  
+				      	<!-- th:if="${vo.depth != 0}" -->
+				      	<span th:if="${vo.depth != 0}" th:each="i : ${#numbers.sequence(1, vo.depth)}" >--</span>
+				      	<a href="#" th:href="@{select(num=${vo.num})}" th:text="${vo.title}">Mark</a>
+		    	  	</td>
 					<td th:text="${vo.writer}">Otto</td>
 					<td th:text="${vo.regDate}">@mdo</td>
 					<td th:text="${vo.hit}"></td>
@@ -76,8 +80,10 @@
 				</tr>
 			</tbody>
 		</table>
-		<a href="#" class="btn btn-primary" th:href="@{./fileDown}">FileDown</a>
-		<a href="#" class="btn btn-info" th:href="@{./insert}">WRITE</a>
+		<div th:if="${session.member != null}">
+			<a href="#" th:if="${board =='notice' and session.member.username=='admin'}"  class="btn btn-primary" th:href="@{./insert}">WRITE</a>
+		 	<a href="#" th:if="${board !='notice'}"  class="btn btn-primary" th:href="@{./insert}">WRITE</a>
+		</div>
 	</div>
 	<div class="container d-flex justify-content-center">
 		<ul class="pagination">
@@ -92,7 +98,7 @@
 				<a class="page-link pager" href="#" th:text="${i}" th:title="${i}">Previous</a>
 			</li>
 			<li th:if="${pager.next}" class="page-item">
-				<a class="page-link" href="#" th:title="${pager.lastNum+1}" th>Next</a>
+				<a class="page-link" href="#" th:title="${pager.lastNum+1}">Next</a>
 			</li>
 		</ul>
 	</div>
