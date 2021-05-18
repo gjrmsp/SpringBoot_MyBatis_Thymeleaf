@@ -3,6 +3,7 @@ package com.sana.s1.board.notice;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ public class NoticeController {
 	@Autowired
 	private NoticeService noticeService;
 	
+	@Value("${board.notice.filePath}")
+	private String filePath;
+
 	@ModelAttribute("board")
 	public String getBoard() {
 		return "notice";
@@ -36,7 +40,7 @@ public class NoticeController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileName", fileName);
 		mv.addObject("oriName", oriName);
-		mv.addObject("filePath", "/upload/notice/");
+		mv.addObject("filePath", filePath);
 		mv.setViewName("fileDown");
 
 		// view의 이름은 Bean의 이름과 일치
@@ -48,6 +52,7 @@ public class NoticeController {
 	// /notice/list
 	@GetMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
+		System.out.println("FilePath : "+filePath);
 		List<BoardVO> ar = noticeService.getList(pager);
 		model.addAttribute("list", ar);
 		model.addAttribute("pager", pager);
