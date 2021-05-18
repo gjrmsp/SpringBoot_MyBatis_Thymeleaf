@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.sana.s1.interceptor.TestInterceptor;
 
-@Configuration
+@Configuration //xml root-context, servlet-context
 public class InterceptorConfig implements WebMvcConfigurer {
 
 	@Autowired
@@ -17,9 +17,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		//적용할 Interceptor bean을 등록
 		registry.addInterceptor(testInterceptor)
-		.addPathPatterns("/notice/**");
-
-		//어떤 URL 설정
-		WebMvcConfigurer.super.addInterceptors(registry);
+		//add -> Interceptor를 적용할 URL 등록
+		//.addPathPatterns("/notice/**")
+		.addPathPatterns("/qna/**")
+		//exclude -> Interceptor에서 제외할 URL 등록
+		.excludePathPatterns("/notice/select");
+		//WebMvcConfigurer.super.addInterceptors(registry);
 	}
 }
