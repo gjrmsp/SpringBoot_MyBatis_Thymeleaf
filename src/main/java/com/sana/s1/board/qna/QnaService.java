@@ -66,7 +66,15 @@ public class QnaService implements BoardService {
 	@Override
 	public int setUpdate(BoardVO boardVO) throws Exception {
 		// TODO Auto-generated method stub
-		return qnaMapper.setUpdate(boardVO);
+//		Random random = new Random();
+//		int result = random.nextInt(1);
+//		
+//		if(result==0) {
+//			//throw new 예외클래스생성자();
+//			throw new MyException("Update Fail");
+//		}
+
+		return qnaMapper.setUpdate(boardVO); //result;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,7 @@ public class NoticeController {
 	}
 
 	// /notice/list
-	@GetMapping("list")
+	@PostMapping("list")
 	public String getList(Model model, Pager pager) throws Exception {
 		List<BoardVO> ar = noticeService.getList(pager);
 		model.addAttribute("list", ar);
@@ -101,5 +102,22 @@ public class NoticeController {
 	public String setDelete(BoardVO boardVO) throws Exception {
 		int result = noticeService.setDelete(boardVO);
 		return "redirect:./list";
+	}
+
+//	@ExceptionHandler(예외객체명.class)
+//	public String ex1() {
+//		//코드 진행
+//	}
+
+	@ExceptionHandler(ArithmeticException.class)
+	public String getMath(Model model) {
+		model.addAttribute("message", "수학 오류 발생");
+		return "error/500";
+	}
+
+	@ExceptionHandler(Throwable.class)
+	public String getException(Model model) {
+		model.addAttribute("message", "관리자에게 문의");
+		return "error/500";
 	}
 }
