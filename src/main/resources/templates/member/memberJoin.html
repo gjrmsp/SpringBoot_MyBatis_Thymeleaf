@@ -16,45 +16,46 @@
 	<div class="container mt-2">
 		<h1>Member Join Page</h1>
 
-		<form id="frm" action="./join" th:action="@{./memberJoin}"
+		<form id="frm" th:object="${memberVO}" action="./join" th:action="@{./join}"
 			method="post" enctype="multipart/form-data">
 
 			<div class="form-group">
 				<label for="id">ID</label>
-				<input type="text" class="form-control"	id="id" name="username">
-				<h4 id="idResult"></h4>
+				<input type="text" class="form-control"	id="id" name="username" th:field="*{username}">
+				<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
 				<!-- ID 는 6글자 이상 -->
 			</div>
 
 			<div class="form-group">
 				<label for="pw">Password</label>
 				<input type="password" class="form-control" id="pw" name="password1">
-				<h4 id="pwResult"></h4>
+				<p th:if="${#fields.hasErrors('password1')}" th:errors="*{password1}"></p>
 				<!-- PW는 8글자 이상 -->
 			</div>
 
 			<div class="form-group">
 				<label for="pw">Password</label>
-				<input type="password" class="form-control" id="pw2" name="password">
-				<!-- PW 두개는 일치 -->
+				<input type="password" class="form-control" id="pw2" name="password" th:field="*{password}">
+				<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 			</div>
 
 			<div class="form-group">
 				<label for="name">Name</label>
-				<input type="text" class="form-control etc" id="name" name="name">
+				<input type="text" class="form-control etc"	id="name" th:field="*{name}">
+				<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
 				<!-- 비어 있으면 X -->
 			</div>
 
 			<div class="form-group">
 				<label for="email">Email</label>
-				<input type="text" class="form-control etc" id="email" name="email">
-				<!-- 비어 있으면 X -->
+				<input type="email" class="form-control etc" id="email" th:field="*{email}">
+				<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
 			</div>
 
 			<div class="form-group">
-				<label for="phone">Phone</label> <input type="text"
-					class="form-control etc" id="phone" name="phone">
-				<!-- 비어 있으면 X -->
+				<label for="phone">Phone</label>
+				<input type="text" class="form-control etc"	id="phone" th:field="*{phone}">
+				<p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
 			</div>
 
 			<div class="form-group">

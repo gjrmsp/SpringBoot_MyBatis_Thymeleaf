@@ -5,16 +5,27 @@
 
 <mapper namespace="com.sana.s1.member.MemberMapper">
 	<insert id="setJoin" parameterType="MemberVO">
-		insert into member (username, password, name, email, phone)
-		values (#{username}, #{password}, #{name}, #{email}, #{phone})
-	</insert>
-	
-	<insert id="setJoinFile" parameterType="MemberFileVO">
-		insert into memberFiles (username, fileName, oriName)
-		values(#{username}, #{fileName}, #{oriName})
+		insert into member (username,
+		password, name, email, phone)
+		values (#{username}, #{password},
+		#{name}, #{email}, #{phone})
 	</insert>
 
-	<select id="getLogin" parameterType="MemberVO" resultType="MemberVO">
-		select * from member where username=#{username} and password=#{password} 
+	<insert id="setJoinFile" parameterType="MemberFileVO">
+		insert into memberFiles
+		(username, fileName, oriName)
+		values(#{username}, #{fileName},
+		#{oriName})
+	</insert>
+
+	<select id="getLogin" parameterType="MemberVO"
+		resultType="MemberVO">
+		select * from member where username=#{username} and
+		password=#{password}
+	</select>
+
+	<select id="getUsername" parameterType="MemberVO"
+		resultType="MemberVO">
+		select * from member where username=#{username}
 	</select>
 </mapper>
