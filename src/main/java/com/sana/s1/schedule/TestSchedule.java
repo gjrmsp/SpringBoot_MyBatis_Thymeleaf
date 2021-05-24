@@ -5,7 +5,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.sana.s1.member.MemberMapper;
-import com.sun.swing.internal.plaf.metal.resources.metal;
 
 @Component
 public class TestSchedule {
