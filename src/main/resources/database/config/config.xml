@@ -11,6 +11,7 @@
   		<typeAlias type="com.sana.s1.board.qna.QnaVO" alias="QnaVO"/>
   		<typeAlias type="com.sana.s1.member.MemberVO" alias="MemberVO"/>
   		<typeAlias type="com.sana.s1.member.MemberFileVO" alias="MemberFileVO"/>
+  		<typeAlias type="com.sana.s1.member.RoleVO" alias="RoleVO"/>
   		<typeAlias type="com.sana.s1.util.Pager" alias="Pager"/>
   	</typeAliases>
   </configuration>

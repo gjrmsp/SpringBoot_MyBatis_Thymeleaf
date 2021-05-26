@@ -5,10 +5,13 @@
 
 <mapper namespace="com.sana.s1.member.MemberMapper">
 	<insert id="setJoin" parameterType="MemberVO">
-		insert into member (username,
-		password, name, email, phone)
-		values (#{username}, #{password},
-		#{name}, #{email}, #{phone})
+		insert into member (username, password, name, email, phone, enabled)
+		values (#{username}, #{password}, #{name}, #{email}, #{phone}, #{enabled})
+	</insert>
+	
+	<insert id="setMemberRole" parameterType="java.util.Map">
+		insert into member_role (username, id)
+		values (#{username}, (select id from role where roleName=#{roleName}))
 	</insert>
 
 	<insert id="setJoinFile" parameterType="MemberFileVO">
@@ -19,10 +22,27 @@
 	</insert>
 
 	<select id="getLogin" parameterType="MemberVO"
-		resultType="MemberVO">
-		select * from member where username=#{username} and
-		password=#{password}
+		resultMap="getLoginResult">
+		select M.*, R.*
+		from member M left join member_role MR
+		on M.username = MR.username
+		left join role R
+		on MR.id = R.id
+		where M.username=#{username}
 	</select>
+	
+	<resultMap type="MemberVO" id="getLoginResult">
+		<id column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="name" property="name"/>
+		<result column="email" property="email"/>
+		<result column="phone" property="phone"/>
+		<result column="enabled" property="enabled"/>
+		<collection property="roles" javaType="java.util.List" ofType="RoleVO">
+			<id column="id" property="id"/>
+			<result column="roleName" property="roleName"/>
+		</collection>
+	</resultMap>
 
 	<select id="getUsername" parameterType="MemberVO"
 		resultType="MemberVO">

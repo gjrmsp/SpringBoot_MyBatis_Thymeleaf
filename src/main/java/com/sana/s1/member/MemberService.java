@@ -1,20 +1,43 @@
 package com.sana.s1.member;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sana.s1.util.FileManager;
 
 @Service
-public class MemberService {
+//Spring security에서 사용하는 Service
+//UserDetailsService 구현
+public class MemberService implements UserDetailsService {
 
 	@Autowired
 	private MemberMapper memberMapper;
 
 	@Autowired
 	private FileManager fileManager;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	//login 메서드
+	//개발자가 호출 X
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		MemberVO memberVO = new MemberVO();
+		memberVO.setUsername(username);
+		memberVO = memberMapper.getLogin(memberVO);
+		return memberVO;
+	}
 
 	//검증 메서드
 	public boolean memberError(MemberVO memberVO, Errors errors) throws Exception {
@@ -45,15 +68,33 @@ public class MemberService {
 
 		//admin, adminstrator, root
 
+		System.out.println("Validate : "+result);
 		return result;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public int setJoin(MemberVO memberVO, MultipartFile multipartFile) throws Exception {
+		//0. 사전 작업
+
+		//a. password 암호화
+		memberVO.setPassword(passwordEncoder.encode(memberVO.getPassword()));
+
+		//b. 사용자 계정 활성화
+		memberVO.setEnabled(true);
+		System.out.println(memberVO.getUsername());
+		System.out.println(memberVO.getPassword());
+		System.out.println(memberVO.getPassword().length());
 
 		//1. Member Table 저장
 		int result = memberMapper.setJoin(memberVO);
 
-		//2. HDD에 저장
+		//2. Role Table 저장
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("username", memberVO.getUsername());
+		map.put("roleName", "ROLE_MEMBER");
+		result = memberMapper.setMemberRole(map);
+
+		//3. HDD에 저장
 		String filePath = "upload/member/";
 
 		if(multipartFile.getSize() != 0) {
@@ -64,14 +105,14 @@ public class MemberService {
 			memberFileVO.setOriName(multipartFile.getOriginalFilename());
 			memberFileVO.setUsername(memberVO.getUsername());
 
-			//3. MemberFiles table 저장
+			//4. MemberFiles table 저장
 			result = memberMapper.setJoinFile(memberFileVO);
 		}
 		return result;
 	}
 
-	public MemberVO getLogin(MemberVO memberVO) throws Exception {
-		return memberMapper.getLogin(memberVO);
-	}
+//	public MemberVO getLogin(MemberVO memberVO)throws Exception{
+//		return memberMapper.getLogin(memberVO);
+//	}
 
 }

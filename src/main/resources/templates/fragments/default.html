@@ -39,7 +39,7 @@
 				</li>
 			</ul>
 
-			<ul th:if="${session.member != null}" class="navbar-nav mr-auto mt-2 mt-lg-0">
+			<ul th:if="${session.SPRING_SECURITY_CONTEXT != null}" class="navbar-nav mr-auto mt-2 mt-lg-0">
 				<li class="nav-item">
 					<a class="nav-link" th:href="@{/member/page}" href="#">MyPage</a>
 				</li>
@@ -48,7 +48,7 @@
 				</li>
 			</ul>
 
-		    <ul th:unless="${session.member != null}" class="navbar-nav mr-auto mt-2 mt-lg-0">	
+		    <ul th:unless="${session.SPRING_SECURITY_CONTEXT != null}" class="navbar-nav mr-auto mt-2 mt-lg-0">	
 				<li class="nav-item">
 					<a class="nav-link" th:href="@{/member/join}" href="#">Join</a>
 				</li>
